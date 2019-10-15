@@ -1,7 +1,9 @@
 <?php
+
 header('Content-Type: text/html; charset=utf-8');
 
 require 'simple_html_dom.php';
+
 
 $html = file_get_html('http://www.koeri.boun.edu.tr/scripts/lst6.asp');
 $depremData = $html->find('pre', 0);
@@ -47,12 +49,19 @@ foreach ($depremArray as $deprem) {
         $enlem = substr($deprem, 18, 7);
         $boylam = substr($deprem, 25, 7);
 
+
         if (strpos(substr($deprem, 32, 4), '-')) {
             $derinlik = substr($deprem, 32, 3);
             $siddet = substr($deprem, 38, 3);
-        } else {
+        } else if (strpos(substr($deprem, 32, 5), '-')) {
             $derinlik = substr($deprem, 32, 4);
             $siddet = substr($deprem, 39, 3);
+        } else if (strpos(substr($deprem, 32, 6), '-')) {
+            $derinlik = substr($deprem, 32, 5);
+            $siddet = substr($deprem, 40, 3);
+        } else {
+            $derinlik = "bilinmiyor";
+            $siddet = "bilinmiyor";
         }
 
         $depremSingle = array(
@@ -72,9 +81,3 @@ foreach ($depremArray as $deprem) {
     }
 }
 echo json_encode($tumDepremler, true);
-
-
-
-
-
-
